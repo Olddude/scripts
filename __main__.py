@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-import sqlite3
+from sqlite3 import connect
+from os import environ
+
+for item, value in environ.items():
+  print('{}: {}'.format(item, value))
 
 def main():
-  con = sqlite3.connect("openportals.db")
-  cur = con.cursor()
-  for row in cur.execute("""
+  connection = connect(environ["DATABASE"])
+  cursor = connection.cursor()
+  for row in cursor.execute("""
     select odp.portal_title, odp.api, odp.url
     from opendataportals as odp
-    where odp.api like '%berlin%'
   """): print(row)
-  con.commit()
-  con.close()
+  connection.commit()
+  connection.close()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
   main()
